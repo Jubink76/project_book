@@ -14,33 +14,33 @@
           <div class="head"><i class="icon fa fa-align-justify fa-fw"></i> Categories</div>
           <nav class="yamm megamenu-horizontal">
             
-            <ul class="nav">
-              {% for category in categories %}
-
-                {% if not category.is_deleted %}
-                  <li class="dropdown menu-item"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon fa fa-shopping-bag" aria-hidden="true"></i>{{ category.category_name }}</a></li>
+          <ul class="nav">
+            {% for category in categories %}
+              {% if category.is_available %}
+                <li class="dropdown menu-item"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon fa fa-shopping-bag" aria-hidden="true"></i>{{ category.category_name }}</a></li>
+              {% endif %}
+            {% endfor %}
               
-                {% endif %}
-              {% endfor %}  
-              {% comment %} <li class="dropdown menu-item"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon fa fa-laptop" aria-hidden="true"></i>{{ category.category_name }}</a></li>
+      
+            {% comment %} <li class="dropdown menu-item"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon fa fa-laptop" aria-hidden="true"></i>{{ category.category_name }}</a></li>
                 
               
-              <li class="dropdown menu-item"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon fa fa-paw" aria-hidden="true"></i>{{ category.category_name }}</a></li>
+            <li class="dropdown menu-item"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon fa fa-paw" aria-hidden="true"></i>{{ category.category_name }}</a></li>
                 
               
-              <li class="dropdown menu-item"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon fa fa-clock-o"></i>{{ category.category_name }}</a></li>
+            <li class="dropdown menu-item"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon fa fa-clock-o"></i>{{ category.category_name }}</a></li>
                 
               
-              <li class="dropdown menu-item"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon fa fa-heartbeat"></i>{{ category.category_name }}</a></li>
+            <li class="dropdown menu-item"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon fa fa-heartbeat"></i>{{ category.category_name }}</a></li>
               
               
-              <li class="dropdown menu-item"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon fa fa-paper-plane"></i>{{ category.category_name }}</a> </li>
+            <li class="dropdown menu-item"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon fa fa-paper-plane"></i>{{ category.category_name }}</a> </li>
               
-              <li class="dropdown menu-item"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon fa fa-futbol-o"></i>{{ category.category_name }}</a> </li>
+            <li class="dropdown menu-item"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon fa fa-futbol-o"></i>{{ category.category_name }}</a> </li>
               
-              <li class="dropdown menu-item"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon fa fa-envira"></i>{{ category.category_name }}</a></li>
-              {% endcomment %}
-            </ul>
+            <li class="dropdown menu-item"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon fa fa-envira"></i>{{ category.category_name }}</a></li> {% endcomment %}
+              
+          </ul>
             
             <!-- /.nav --> 
           </nav>

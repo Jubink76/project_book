@@ -14,11 +14,11 @@
           <div class="head"><i class="icon fa fa-align-justify fa-fw"></i> Categories</div>
           <nav class="yamm megamenu-horizontal">
             <ul class="nav">
-              {% for category in categories %}
-
+            {% for category in categories %}
+              {% if category.is_available %}
                 <li class="dropdown menu-item"> <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon fa fa-shopping-bag" aria-hidden="true"></i>{{ category.category_name }}</a></li>
-
-              {% endfor %}
+              {% endif %}
+            {% endfor %}
     
             </ul>
             <!-- /.nav --> 
@@ -2838,42 +2838,42 @@
     </div>
     <!-- /.row --> 
     <!-- ============================================== BRANDS CAROUSEL ============================================== -->
-    {% comment %} <div id="brands-carousel" class="logo-slider">
+    <div id="brands-carousel" class="logo-slider">
       <div class="logo-slider-inner">
         <div id="brand-slider" class="owl-carousel brand-slider custom-carousel owl-theme">
-          <div class="item m-t-15"> <a href="#" class="image"> <img data-echo="user/images/brands/brand1.png" src="{% static 'user/images/blank.gif' %}" alt=""> </a> </div>
+          <div class="item m-t-15"> <a href="#" class="image"> <img data-echo="{% static 'user/images/sliders/01.jpg' %}"  src="{% static 'user/images/blank.gif' %}"alt=""> </a> </div>
           <!--/.item-->
           
-          <div class="item m-t-10"> <a href="#" class="image"> <img data-echo="user/images/brands/brand2.png" src="{% static 'user/images/blank.gif' %}" alt=""> </a> </div>
+          <div class="item m-t-10"> <a href="#" class="image"> <img data-echo="{% static 'user/images/sliders/01.jpg' %}" src="{% static 'user/images/blank.gif' %}" alt=""> </a> </div>
           <!--/.item-->
           
-          <div class="item"> <a href="#" class="image"> <img data-echo="user/images/brands/brand3.png" src="{% static 'user/images/blank.gif' %}" alt=""> </a> </div>
+          <div class="item"> <a href="#" class="image"> <img data-echo="{% static 'user/images/sliders/01.jpg' %}" src="{% static 'user/images/blank.gif' %}" alt=""> </a> </div>
           <!--/.item-->
           
-          <div class="item"> <a href="#" class="image"> <img data-echo="user/images/brands/brand4.png" src="{% static 'user/images/blank.gif' %}" alt=""> </a> </div>
+          <div class="item"> <a href="#" class="image"> <img data-echo="{% static 'user/images/sliders/01.jpg' %}" src="{% static 'user/images/blank.gif' %}" alt=""> </a> </div>
           <!--/.item-->
           
-          <div class="item"> <a href="#" class="image"> <img data-echo="user/images/brands/brand5.png" src="{% static 'user/images/blank.gif' %}" alt=""> </a> </div>
+          <div class="item"> <a href="#" class="image"> <img data-echo="{% static 'user/images/sliders/01.jpg' %}" src="{% static 'user/images/blank.gif' %}" alt=""> </a> </div>
           <!--/.item-->
           
-          <div class="item"> <a href="#" class="image"> <img data-echo="user/images/brands/brand6.png" src="{% static 'user/images/blank.gif' %}" alt=""> </a> </div>
+          <div class="item"> <a href="#" class="image"> <img data-echo="{% static 'user/images/sliders/01.jpg' %}" src="{% static 'user/images/blank.gif' %}" alt=""> </a> </div>
           <!--/.item-->
           
-          <div class="item"> <a href="#" class="image"> <img data-echo="user/images/brands/brand2.png" src="{% static 'user/images/blank.gif' %}" alt=""> </a> </div>
+          <div class="item"> <a href="#" class="image"> <img data-echo="{% static 'user/images/sliders/01.jpg' %}" src="{% static 'user/images/blank.gif' %}" alt=""> </a> </div>
           <!--/.item-->
           
-          <div class="item"> <a href="#" class="image"> <img data-echo="user/images/brands/brand4.png" src="{% static 'user/images/blank.gif' %}" alt=""> </a> </div>
+          <div class="item"> <a href="#" class="image"> <img data-echo="{% static 'user/images/sliders/01.jpg' %}" src="{% static 'user/images/blank.gif' %}" alt=""> </a> </div>
           <!--/.item-->
           
-          <div class="item"> <a href="#" class="image"> <img data-echo="user/images/brands/brand1.png" src="{% static 'user/images/blank.gif' %}" alt=""> </a> </div>
+          <div class="item"> <a href="#" class="image"> <img data-echo="{% static 'user/images/sliders/01.jpg' %}" src="{% static 'user/images/blank.gif' %}" alt=""> </a> </div>
           <!--/.item-->
           
-          <div class="item"> <a href="#" class="image"> <img data-echo="user/images/brands/brand5.png" src="{% static 'user/images/blank.gif' %}" alt=""> </a> </div>
+          <div class="item"> <a href="#" class="image"> <img data-echo="{% static 'user/images/sliders/01.jpg' %}" src="{% static 'user/images/blank.gif' %}" alt=""> </a> </div>
           <!--/.item--> 
         </div>
         <!-- /.owl-carousel #logo-slider --> 
       </div>
-      <!-- /.logo-slider-inner -->  {% endcomment %}
+      <!-- /.logo-slider-inner -->  
       
     </div>
     <!-- /.logo-slider --> 

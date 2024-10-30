@@ -1,0 +1,147 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block csslink %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+{% endblock %}
+
+
+{% block content %}
+<div class="container-fluid py-5">
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="text-white mb-0">Add New Product</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="{% url 'admin_dashboard' %}" class="text-secondary">Admin</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'admin_products' %}" class="text-secondary">Products</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Add Product</li>
+                    </ol>
+                </nav>
+            </div>
+            <form>
+                <!-- General Information -->
+                <div class="section mb-4">
+                    <h2 class="section-title mb-3">General Information</h2>
+                    
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Book Name</label>
+                            <input type="text" name="book_name" class="form-control" placeholder="Type product name here...">
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-control" name="description" rows="4" placeholder="Type product description here..."></textarea>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Stock Quantity</label>
+                            <input type="number" name="stock_quantity" class="form-control" placeholder="Type Stock Quantity here...">
+                        </div>
+                    
+                </div>
+            
+                <!-- Pricing -->
+                <div class="section mb-4">
+                    <h2 class="section-title mb-3">Pricing</h2>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Base Price</label>
+                            <input type="text" name="price" class="form-control" placeholder="Type base price here...">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">VAT Amount (%)</label>
+                            <input type="text" name="vat_amount" class="form-control" placeholder="Type VAT amount...">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Discount Percentage (%)</label>
+                            <input type="text" name="discount_percentage" class="form-control" placeholder="Type discount percentage...">
+                        </div>
+                    </div>
+                </div>
+            
+                <!-- Category, Author, Language -->
+                <div class="section mb-4">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Category</label>
+                            <select name="category" class="form-control">
+                                {% for category in categories %}
+                                <option value="{{ category.category_name }}">Select a category</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Author Name</label>
+                            <input type="text" name="author_name" class="form-control" placeholder="Author name">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Language</label>
+                            <select name="language" class="form-control">
+                                <option value="">English</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 mb-3">
+                    <label class="form-label">Author Details</label>
+                    <textarea class="form-control" name="bio" rows="5" placeholder="Type product description here..."></textarea>
+                </div>
+            
+                <!-- Image Upload -->
+                <div class="mb-4 d-flex gap-4">
+                    <div class="border border-dashed border-secondary rounded-lg p-4 d-flex flex-column align-items-center bg-dark text-white" style="flex: 1;">
+                      <div class="mb-2">
+                        <img src="/api/placeholder/32/32" alt="Upload icon" class="img-fluid">
+                      </div>
+                      <input type="file" name="profile_photo" class="d-none" id="profile_photo_1" accept="image/jpeg,image/png">
+                      <label for="profile_photo_1" class="cursor-pointer text-center">
+                        <p class="text-sm">Drag and drop image here, or click add image</p>
+                        <button type="button" class="btn btn-primary mt-2">Add image</button>
+                      </label>
+                    </div>
+                    <div class="border border-dashed border-secondary rounded-lg p-4 d-flex flex-column align-items-center bg-dark text-white" style="flex: 1;">
+                      <div class="mb-2">
+                        <img src="/api/placeholder/32/32" alt="Upload icon" class="img-fluid">
+                      </div>
+                      <input type="file" name="profile_photo" class="d-none" id="profile_photo_2" accept="image/jpeg,image/png">
+                      <label for="profile_photo_2" class="cursor-pointer text-center">
+                        <p class="text-sm">Drag and drop image here, or click add image</p>
+                        <button type="button" class="btn btn-primary mt-2">Add image</button>
+                      </label>
+                    </div>
+                    <div class="border border-dashed border-secondary rounded-lg p-4 d-flex flex-column align-items-center bg-dark text-white" style="flex: 1;">
+                      <div class="mb-2">
+                        <img src="/api/placeholder/32/32" alt="Upload icon" class="img-fluid">
+                      </div>
+                      <input type="file" name="profile_photo" class="d-none" id="profile_photo_3" accept="image/jpeg,image/png">
+                      <label for="profile_photo_3" class="cursor-pointer text-center">
+                        <p class="text-sm">Drag and drop image here, or click add image</p>
+                        <button type="button" class="btn btn-primary mt-2">Add image</button>
+                      </label>
+                    </div>
+                    <div class="border border-dashed border-secondary rounded-lg p-4 d-flex flex-column align-items-center bg-dark text-white" style="flex: 1;">
+                      <div class="mb-2">
+                        <img src="/api/placeholder/32/32" alt="Upload icon" class="img-fluid">
+                      </div>
+                      <input type="file" name="profile_photo" class="d-none" id="profile_photo_4" accept="image/jpeg,image/png">
+                      <label for="profile_photo_4" class="cursor-pointer text-center">
+                        <p class="text-sm">Drag and drop image here, or click add image</p>
+                        <button type="button" class="btn btn-primary mt-2">Add image</button>
+                      </label>
+                    </div>
+                   </div>
+            
+                <!-- Action Buttons -->
+                <div class="d-flex justify-content-end gap-3 mt-4">
+                    <a href="{% url 'admin_users' %}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Add Product</button>
+                </div>
+            </form>            
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+{% endblock %}

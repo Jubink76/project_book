@@ -14,7 +14,7 @@
                 <h1 class="text-white mb-0">Users</h1>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="#" class="text-secondary">Admin</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'admin_dashboard' %}" class="text-secondary">Admin</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Users</li>
                     </ol>
                 </nav>
@@ -26,8 +26,9 @@
                     <form method="GET" action="{% url 'admin_users' %}">
                         <div class="search-container">
                             <div class="input-group">
-                                <input type="text" class="form-control search-input" placeholder="Search">
-                                <button class="btn btn-primary" type="button">Search
+                                <input type="search" name="search" class="form-control search-input" 
+                                       placeholder="Search" value="{{ search_query }}">
+                                <button class="btn btn-primary" type="submit">Search
                                     <i class="bi bi-search"></i>
                                 </button>
                             </div>
@@ -35,7 +36,7 @@
                     </form>
                 </div>
                 <div class="col-auto">
-                    <a href=""><button class="btn btn-primary me-2">
+                    <a href="{% url 'add_users' %}"><button class="btn btn-primary me-2">
                         <i class="bi bi-plus-lg me-2"></i>Add new user
                     </button></a>
                     <button class="btn btn-secondary">
@@ -81,7 +82,7 @@
                             <td class="px-6 py-4 text-sm">{{row.date_joined}}</td>
                             <td class="px-6 py-4 text-sm">
                                 <div class="flex gap-2">
-                                    <a href=""><button class="p-1 hover:text-blue-500">👁️</button></a>
+                                    <a href="{% url 'view_users' row.id %}"><button class="p-1 hover:text-blue-500">👁️</button></a>
                                     <a href=""><button class="p-1 hover:text-green-500">✏️</button></a>
                                     <!--<button class="p-1 hover:text-red-500">🗑️</button>-->
                                 </div>
@@ -99,9 +100,9 @@
                     <div class="d-flex align-items-center">
                         <span class="me-2">Showing</span>
                         <select class="form-select form-select-sm" style="width: auto;">
+                            <option>5</option>
+                            <option>10</option>
                             <option>15</option>
-                            <option>30</option>
-                            <option>50</option>
                         </select>
                     </div>
                 </div>
