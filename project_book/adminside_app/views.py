@@ -133,7 +133,7 @@ def admin_category(request):
     paginator = Paginator(categories, 5)
     page_number = request.GET.get('page')
     categories = paginator.get_page(page_number)
-    search_query = request.GET.get('search','')
+    
 
 
     return render(request,'admin_category.html',{'categories':categories})
@@ -194,7 +194,28 @@ def delete_category(request, pk):
     return redirect('admin_category')
 
 def admin_products(request):
-    return render(request,'admin_products.html')
+    books = BookTable.objects.all()
+
+    # search query for products
+    search_query = request.GET.get('search','')
+
+    if search_query:
+        if search_query.isdigit():
+            books = BookTable.objects.filter(id=search_query)
+        else:
+            books = BookTable.objects.filter(
+                Q(book_name__icontains = search_query) | 
+                Q(author__icontains = search_query) | 
+                Q(language__icontains = search_query) 
+            ).order_by('id')
+    else:
+        books = BookTable.objects.all().order_by('id')
+
+    paginator = Paginator(books, 5)
+    page_number = request.GET.get('page')
+    books = paginator.get_page(page_number)
+            
+    return render(request,'admin_products.html',{'books':books})
 
 def add_products(request):
     if request.method == 'POST':
@@ -204,20 +225,34 @@ def add_products(request):
         price = request.POST.get('price')
         vat_amount = request.POST.get('vat_amount')
         discount_percentage = request.POST.get('discount_percentage')
-        bio = request.POST.get('bio')
+        
 
         author_name = request.POST.get('author_name')
-        author, created = Author.objects.get_or_create(name=author_name)
         bio = request.POST.get('bio')
-        bio, created = Author.objects.get_or_create(name=bio)
+        author, created = Author.objects.get_or_create(name=author_name)
+        if created or not author.bio:
+            author.bio = bio
+            author.save()
 
 
-        language_name = request.POST.get('language_name')
-        language, created = Language.objects.get_or_create(name=language_name)
+        language_name = request.POST.get('language')
+        new_language = request.POST.get('new_language')
+        
+        if language_name:  # Existing language selected
+            language, created = Language.objects.get_or_create(name=language_name)
+        elif new_language:  # New language input
+            language, created = Language.objects.get_or_create(name=new_language)
+        else:
+            # Handle case when no language is provided (optional)
+            language = None
 
-        category_name = request.POST.get('category_name')
-        category, created = CategoryTable.objects.get_or_create(category_name=category_name)
-
+        category_name = request.POST.get('category')
+        
+        if category_name:  # Ensure category_name is not empty
+            category, created = CategoryTable.objects.get_or_create(category_name=category_name)
+        else:
+            # Handle the case where no category is provided (optional)
+            category = None
 
         book = BookTable.objects.create(
             book_name = book_name,
@@ -233,4 +268,93 @@ def add_products(request):
 
         for image_file in request.FILES.getlist('book_images'):
             BookImage.objects.create(book=book, image=image_file)
-    return render(request,'add_products.html')
+        return redirect('admin_products')
+    categories = CategoryTable.objects.filter(is_available=True, is_deleted=False)
+    languages = Language.objects.all()
+    return render(request,'add_products.html',{'categories':categories,'languages':languages})
+
+def view_product(request,pk):
+    book = get_object_or_404(BookTable,id=pk)
+    images = book.images.all()
+    return render(request,'view_product.html',{'book':book,'images':images})
+
+
+def edit_product(request, pk):
+    book = get_object_or_404(BookTable, id=pk)
+    
+    if request.method == "POST":
+        if 'delete_book' in request.POST:
+            book.is_available = False
+            book.is_deleted = True
+            book.save()
+            messages.success(request, 'Book marked as deleted.')
+            return redirect('admin_products')
+        
+        elif 'readd_book' in request.POST:
+            book.is_available = True
+            book.is_deleted = False
+            book.save()
+            messages.success(request, 'Book re-added to the list successfully.')
+            return redirect('admin_products')
+        
+        else:
+            # Update book details
+            book.book_name = request.POST.get('book_name')
+            book.description = request.POST.get('description')
+            book.stock_quantity = request.POST.get('stock_quantity')
+            book.price = request.POST.get('price')
+            book.vat_amount = request.POST.get('vat_amount')
+            book.discount_percentage = request.POST.get('discount_percentage')
+            
+            # Update category, language, author
+            category_name = request.POST.get('category')
+            language_name = request.POST.get('language')
+            author_name = request.POST.get('author_name')
+            bio = request.POST.get('bio')
+            
+            if category_name:
+                book.category, _ = CategoryTable.objects.get_or_create(category_name=category_name)
+            if language_name:
+                book.language, _ = Language.objects.get_or_create(name=language_name)
+            if author_name:
+                author, _ = Author.objects.get_or_create(name=author_name)
+                if not author.bio:
+                    author.bio = bio
+                author.save()
+                book.author = author
+
+            book.save()
+
+            # Handle image updates
+            # Remove selected images
+            for image_id in request.POST.getlist('remove_images'):
+                BookImage.objects.filter(id=image_id, book=book).delete()
+            
+            # Add new images if any
+            for image_file in request.FILES.getlist('book_images'):
+                BookImage.objects.create(book=book, image=image_file)
+            
+            messages.success(request, 'Book details updated successfully.')
+            return redirect('admin_products')
+    
+    # Retrieve existing categories, languages, authors, and images
+    categories = CategoryTable.objects.filter(is_available=True, is_deleted=False)
+    languages = Language.objects.all()
+    authors = Author.objects.all()
+    
+    context = {
+        'book': book,
+        'categories': categories,
+        'languages': languages,
+        'authors': authors,
+    }
+    
+    return render(request, 'edit_product.html', context)
+
+def delete_product(request,pk):
+    book = get_object_or_404(BookTable, id=pk)
+    book.is_deleted = True
+    book.is_available = False
+    book.save()
+    messages.success(request,f"{book.book_name} is deleted successfully")
+    return redirect('admin_products')

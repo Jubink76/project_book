@@ -20,7 +20,8 @@
                     </ol>
                 </nav>
             </div>
-            <form>
+            <form method="POST" action="{% url 'add_products' %}" enctype="multipart/form-data">
+                {% csrf_token %}
                 <!-- General Information -->
                 <div class="section mb-4">
                     <h2 class="section-title mb-3">General Information</h2>
@@ -64,21 +65,36 @@
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Category</label>
-                            <select name="category" class="form-control">
+                            <!-- Input field with dropdown suggestions -->
+                            <input list="categories" name="category" class="form-control" placeholder="Select or type category">
+                            
+                            <!-- Datalist with predefined options -->
+                            <datalist id="categories">
                                 {% for category in categories %}
-                                <option value="{{ category.category_name }}">Select a category</option>
+                                    <option value="{{ category.category_name }}">
                                 {% endfor %}
-                            </select>
+                            </datalist>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Author Name</label>
                             <input type="text" name="author_name" class="form-control" placeholder="Author name">
+                            <datalist id="authors">
+                                {% for author in authors %}
+                                    <option value="{{ author.author_name }}">
+                                {% endfor %}
+                            </datalist>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Language</label>
-                            <select name="language" class="form-control">
-                                <option value="">English</option>
-                            </select>
+                            <!-- Input field with dropdown suggestions -->
+                            <input list="languages" name="language" class="form-control" placeholder="Select or type language">
+                            
+                            <!-- Datalist with predefined options -->
+                            <datalist id="languages">
+                                {% for language in languages %}
+                                    <option value="{{ language.language_name }}">
+                                {% endfor %}
+                            </datalist>
                         </div>
                     </div>
                 </div>
@@ -89,47 +105,23 @@
             
                 <!-- Image Upload -->
                 <div class="mb-4 d-flex gap-4">
+                    {% for i in "1234" %}
                     <div class="border border-dashed border-secondary rounded-lg p-4 d-flex flex-column align-items-center bg-dark text-white" style="flex: 1;">
-                      <div class="mb-2">
-                        <img src="/api/placeholder/32/32" alt="Upload icon" class="img-fluid">
-                      </div>
-                      <input type="file" name="profile_photo" class="d-none" id="profile_photo_1" accept="image/jpeg,image/png">
-                      <label for="profile_photo_1" class="cursor-pointer text-center">
+                        <div class="mb-2">
+                          <!-- Image placeholder for preview with unique id -->
+                          <img src="{% static 'admin/images/logo/upload.webp' %}" alt="Upload icon" id="image_preview_{{i}}" class="img-fluid" onclick="triggerFileInput({{i}})" style="cursor: pointer;">
+                        </div>
                         <p class="text-sm">Drag and drop image here, or click add image</p>
-                        <button type="button" class="btn btn-primary mt-2">Add image</button>
-                      </label>
+                        <!-- Hidden file input with unique id -->
+                        <input type="file" name="book_images" class="d-none" id="profile_photo_{{i}}" accept="image/jpeg,image/png" onchange="previewImage(event, {{i}})">
+                        
+                        <!-- Add Image Button -->
+                        <label for="profile_photo_{{i}}" class="cursor-pointer text-center">
+                          <button type="button" class="btn btn-primary mt-2" onclick="submitImage()">Add image</button>
+                        </label>
                     </div>
-                    <div class="border border-dashed border-secondary rounded-lg p-4 d-flex flex-column align-items-center bg-dark text-white" style="flex: 1;">
-                      <div class="mb-2">
-                        <img src="/api/placeholder/32/32" alt="Upload icon" class="img-fluid">
-                      </div>
-                      <input type="file" name="profile_photo" class="d-none" id="profile_photo_2" accept="image/jpeg,image/png">
-                      <label for="profile_photo_2" class="cursor-pointer text-center">
-                        <p class="text-sm">Drag and drop image here, or click add image</p>
-                        <button type="button" class="btn btn-primary mt-2">Add image</button>
-                      </label>
-                    </div>
-                    <div class="border border-dashed border-secondary rounded-lg p-4 d-flex flex-column align-items-center bg-dark text-white" style="flex: 1;">
-                      <div class="mb-2">
-                        <img src="/api/placeholder/32/32" alt="Upload icon" class="img-fluid">
-                      </div>
-                      <input type="file" name="profile_photo" class="d-none" id="profile_photo_3" accept="image/jpeg,image/png">
-                      <label for="profile_photo_3" class="cursor-pointer text-center">
-                        <p class="text-sm">Drag and drop image here, or click add image</p>
-                        <button type="button" class="btn btn-primary mt-2">Add image</button>
-                      </label>
-                    </div>
-                    <div class="border border-dashed border-secondary rounded-lg p-4 d-flex flex-column align-items-center bg-dark text-white" style="flex: 1;">
-                      <div class="mb-2">
-                        <img src="/api/placeholder/32/32" alt="Upload icon" class="img-fluid">
-                      </div>
-                      <input type="file" name="profile_photo" class="d-none" id="profile_photo_4" accept="image/jpeg,image/png">
-                      <label for="profile_photo_4" class="cursor-pointer text-center">
-                        <p class="text-sm">Drag and drop image here, or click add image</p>
-                        <button type="button" class="btn btn-primary mt-2">Add image</button>
-                      </label>
-                    </div>
-                   </div>
+                    {% endfor %}
+                </div>
             
                 <!-- Action Buttons -->
                 <div class="d-flex justify-content-end gap-3 mt-4">
@@ -143,5 +135,27 @@
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function previewImage(event, id) {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            document.getElementById(`image_preview_${id}`).src = e.target.result; // Use dynamic id
+          };
+          reader.readAsDataURL(file); // Convert to base64 string for preview
+        }
+      }
+      
+      // JavaScript function to trigger the file input by clicking on the preview image
+      function triggerFileInput(id) {
+        document.getElementById(`profile_photo_${id}`).click(); // Use dynamic id
+      }
+      
+      // JavaScript function to handle form submission when clicking "Add image"
+      function submitImage() {
+        document.getElementById('profile_photo_form').submit(); // Assumes a form with this id is wrapping the input
+      }
+  </script>
 
 {% endblock %}
